@@ -82,8 +82,6 @@ namespace pingm
                 nodes.Add(node);
             }
 
-            var d = new NetworkNode(null, null);
-
             // TODO check that args are valid
             // TODO check valid IP address
             // TODO check hostname resolves
