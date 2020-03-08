@@ -1,2 +1,2 @@
 # PingM
-Basic utilty to pin multiple hosts in parallel
+Basic utility to ping multiple hosts in parallel.
