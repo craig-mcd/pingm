@@ -29,7 +29,6 @@ namespace pingm
 
             // TODO Add error handling
             int timeOut = int.Parse(args[0]) * 1_000;       // Convert from seconds to millis
-            // var nodes = new List<NetworkNode>();
             var nodes = new List<NetworkNode>();
 
             // Event handler for CTRL-C
@@ -53,7 +52,6 @@ namespace pingm
 
                 if (isIp)
                 {
-                    // node = new NetworkNode("na", ip);
                     node = new NetworkNode("", ip);
                 }
                 else
@@ -68,23 +66,20 @@ namespace pingm
                     {
                         dns = Dns.GetHostEntry(potentialNode).AddressList;
                     }
-                    #pragma warning disable CS0168
-                    catch (SocketException ignored)
-                    #pragma warning restore CS0168
+                    catch (SocketException)
                     {
                         PrintNotValid(potentialNode);
                         continue;
                     }
 
+                    // Often multiple IPs returned, just take the first
+                    // TODO Look at using all IP's returned, maybe as a CLI option
                     node = new NetworkNode(potentialNode, dns[0]);
                 }
 
                 nodes.Add(node);
             }
 
-            // TODO check that args are valid
-            // TODO check valid IP address
-            // TODO check hostname resolves
             while (isRunning)
             {
                 Console.BackgroundColor = ConsoleColor.Blue;
@@ -138,9 +133,9 @@ namespace pingm
                     Console.WriteLine($"\t{node.HostName,-35}  {reply.Status,-5}");
                 }
             }
-            catch (Exception e)
+            catch (PingException e)
             {
-                // TODO Better error message
+                // TODO Better error message handling
                 Console.WriteLine($"\tThere was a problem: {e.Message}");
                 return;
             }
