@@ -36,6 +36,7 @@ namespace pingm
 
                 Console.ForegroundColor = ConsoleColor.Black;
                 Console.BackgroundColor = ConsoleColor.Yellow;
+                // Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("Finishing...");
                 Console.ResetColor();
                 args.Cancel = true;
@@ -82,8 +83,9 @@ namespace pingm
 
             while (isRunning)
             {
-                Console.BackgroundColor = ConsoleColor.Blue;
                 Console.ForegroundColor = ConsoleColor.White;
+                Console.BackgroundColor = ConsoleColor.Blue;
+
                 Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                 Console.ResetColor();
 
@@ -95,7 +97,7 @@ namespace pingm
 
                 // TODO Check what is the best/optimal value to add to the sleep millis
                 Thread.Sleep(timeOut + 100);
-                Console.WriteLine();
+                Console.Write("\n\n");
             }
 
             Console.ResetColor();
@@ -126,17 +128,17 @@ namespace pingm
 
                 if (reply?.Status == IPStatus.Success)
                 {
-                    Console.WriteLine($"\t{node.HostName,-20} {node.IP,-15} {reply.RoundtripTime}ms");
+                    Console.WriteLine($"{node.HostName,-20} {node.IP,-15} {reply.RoundtripTime}ms");
                 }
                 else
                 {
-                    Console.WriteLine($"\t{node.HostName,-35}  {reply.Status,-5}");
+                    Console.WriteLine($"{node.HostName,-20} {node.IP, -15} {reply.Status,-5}");
                 }
             }
             catch (PingException e)
             {
                 // TODO Better error message handling
-                Console.WriteLine($"\tThere was a problem: {e.Message}");
+                Console.WriteLine($"    There was a problem: {e.Message}");
                 return;
             }
         }
