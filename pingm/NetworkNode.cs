@@ -14,31 +14,47 @@ namespace pingm
             IP = ip;
         }
 
-        public bool Equals(NetworkNode node)
-        {
-            return true;
-        }
 
         public override bool Equals(object obj)
         {
-            // throw new System.NotImplementedException();
-            return true;
+            if ((obj == null) || GetType() != obj.GetType())
+            {
+                return false;
+            }
+            else
+            {
+                return Equals((NetworkNode) obj);
+            }
         }
+
+
+        public bool Equals(NetworkNode node)
+        {
+            return (HostName == node.HostName) && (IP == node.IP);
+        }
+
 
         public override int GetHashCode()
         {
-            // throw new System.NotImplementedException();
-            return 42;
+            return HostName.GetHashCode() ^ IP.GetHashCode();
         }
+
 
         public static bool operator ==(NetworkNode left, NetworkNode right)
         {
             return left.Equals(right);
         }
 
+
         public static bool operator !=(NetworkNode left, NetworkNode right)
         {
             return !(left == right);
+        }
+
+
+        public override string ToString()
+        {
+            return $"Hostname{HostName}, IP: {IP}";
         }
     }
 }

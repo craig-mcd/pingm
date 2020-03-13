@@ -28,7 +28,7 @@ namespace pingm
             bool isRunning = true;
 
             // TODO Add error handling
-            int timeOut = int.Parse(args[0]) * 1_000;       // Convert from seconds to millis
+            int timeOut = int.Parse(args[0]) * 1_000; // Convert from seconds to millis
             var nodes = new List<NetworkNode>();
 
             // Event handler for CTRL-C
@@ -36,7 +36,6 @@ namespace pingm
 
                 Console.ForegroundColor = ConsoleColor.Black;
                 Console.BackgroundColor = ConsoleColor.Yellow;
-                // Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("Finishing...");
                 Console.ResetColor();
                 args.Cancel = true;
@@ -138,7 +137,7 @@ namespace pingm
             catch (PingException e)
             {
                 // TODO Better error message handling
-                Console.WriteLine($"    There was a problem: {e.Message}");
+                Console.WriteLine($"There was a problem: {e.Message}");
                 return;
             }
         }
