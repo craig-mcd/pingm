@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading;
+using System.Text;
 
 // TODO CLI parsing
 // TODO Option for log file
@@ -24,16 +25,14 @@ namespace pingm
                 Environment.Exit(1);
             }
 
-            Console.CursorVisible = false;
-            bool isRunning = true;
-
             // TODO Add error handling
+            bool isRunning = true;
             int timeOut = int.Parse(args[0]) * 1_000; // Convert from seconds to millis
             var nodes = new List<NetworkNode>();
 
             // Event handler for CTRL-C
-            Console.CancelKeyPress += delegate(object sender, ConsoleCancelEventArgs args) {
-
+            Console.CancelKeyPress += delegate(object sender, ConsoleCancelEventArgs args)
+            {
                 Console.ForegroundColor = ConsoleColor.Black;
                 Console.BackgroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("Finishing...");
@@ -80,6 +79,15 @@ namespace pingm
                 nodes.Add(node);
             }
 
+            // Exit if no valid hosts/nodes
+            if (nodes.Count == 0)
+            {
+                PrintNoValidNodes();
+                Environment.Exit(1);
+            }
+
+            Console.CursorVisible = false;
+
             while (isRunning)
             {
                 Console.ForegroundColor = ConsoleColor.White;
@@ -87,6 +95,7 @@ namespace pingm
 
                 Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                 Console.ResetColor();
+                PrintHeader();
 
                 foreach (var node in nodes)
                 {
@@ -105,6 +114,12 @@ namespace pingm
         }
 
 
+        private static void PrintNoValidNodes()
+        {
+            Console.WriteLine("No valid hosts supplied.");
+        }
+
+
         private static void PrintNotValid(string potentialNode)
         {
             Console.WriteLine($"Hostname '{potentialNode}' does not resolve to an IP address.");
@@ -118,8 +133,17 @@ namespace pingm
         }
 
 
+        private static void PrintHeader()
+        {
+            Console.WriteLine("{0,-20} {1,-15}", "Hostname", "IP Address");
+        }
+
+
         private static void ProcessNode(NetworkNode node, int timeOut)
         {
+            var sb = new StringBuilder();
+            sb.Append($"{node.HostName,-20} {node.IP, -15} ");
+
             using Ping ping = new Ping();
             try
             {
@@ -127,19 +151,21 @@ namespace pingm
 
                 if (reply?.Status == IPStatus.Success)
                 {
-                    Console.WriteLine($"{node.HostName,-20} {node.IP,-15} {reply.RoundtripTime}ms");
+                    sb.Append($"{reply.RoundtripTime}ms");
                 }
                 else
                 {
-                    Console.WriteLine($"{node.HostName,-20} {node.IP, -15} {reply.Status,-5}");
+                    sb.Append($"{reply.Status,-5}");
                 }
             }
             catch (PingException e)
             {
                 // TODO Better error message handling
-                Console.WriteLine($"There was a problem: {e.Message}");
-                return;
+                // TODO Better way to handle 'Win32Exception'
+                sb.Append(e.GetBaseException().GetType());
             }
+
+            Console.WriteLine(sb);
         }
     }
 }
