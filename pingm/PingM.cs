@@ -14,9 +14,11 @@ namespace pingm
 {
     class PingM
     {
+        private const string APP_NAME = "pingm";
+        private const int MIN_ARG_SIZE = 2;
+
         static int Main(string[] args)
         {
-            const int MIN_ARG_SIZE = 2;
 
             // Don't run if nothing supplied from user
             if (args.Length < MIN_ARG_SIZE)
@@ -128,8 +130,7 @@ namespace pingm
 
         private static void PrintHelp()
         {
-            const string help = "pingm <timeout in seconds> <host1> <host2> <host..> <host10>";
-            Console.WriteLine(help);
+            Console.WriteLine($"{APP_NAME} <timeout in seconds> <host1> <host2> <host..> <host10>");
         }
 
 
