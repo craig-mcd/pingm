@@ -19,7 +19,6 @@ namespace pingm
 
         static int Main(string[] args)
         {
-
             // Don't run if nothing supplied from user
             if (args.Length < MIN_ARG_SIZE)
             {
@@ -43,8 +42,8 @@ namespace pingm
                 isRunning = false;
             };
 
-            // Copy nodes out of args and convert to Node type
-            // Filter out items that don't resolve
+            // Copy nodes out of args and convert to 'NetworkNode' type
+            // Filter out items that don't resolve and let user know not valid
             for (int i = 1; i < args.Length; i++)
             {
                 string potentialNode = args[i];
@@ -62,7 +61,7 @@ namespace pingm
 
                     IPAddress[] dns;
 
-                    // Try resolve to IP or display it will be ignored
+                    // Try resolve to IP or display it does not resolve
                     try
                     {
                         dns = Dns.GetHostEntry(potentialNode).AddressList;
@@ -170,3 +169,4 @@ namespace pingm
         }
     }
 }
+

@@ -3,7 +3,7 @@ using System.Net;
 
 namespace pingm
 {
-    public struct NetworkNode: IEquatable<NetworkNode>
+    public struct NetworkNode : IEquatable<NetworkNode>
     {
         public string HostName { get; private set; }
         public IPAddress IP { get; private set; }
