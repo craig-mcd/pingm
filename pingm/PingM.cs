@@ -61,14 +61,14 @@ namespace pingm
 
                     IPAddress[] dns;
 
-                    // Try resolve to IP or display it does not resolve
+                    // Try resolve to IP or display if it does not resolve
                     try
                     {
                         dns = Dns.GetHostEntry(potentialNode).AddressList;
                     }
                     catch (SocketException)
                     {
-                        PrintNotValid(potentialNode);
+                        PrintNotValidNode(potentialNode);
                         continue;
                     }
 
@@ -115,30 +115,48 @@ namespace pingm
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
         private static void PrintNoValidNodes()
         {
             Console.WriteLine("No valid hosts supplied.");
         }
 
 
-        private static void PrintNotValid(string potentialNode)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="potentialNode"></param>
+        private static void PrintNotValidNode(string potentialNode)
         {
             Console.WriteLine($"Hostname '{potentialNode}' does not resolve to an IP address.");
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
         private static void PrintHelp()
         {
             Console.WriteLine($"{APP_NAME} <timeout in seconds> <host1> <host2> <host..> <host10>");
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
         private static void PrintHeader()
         {
             Console.WriteLine("{0,-20} {1,-15}", "Hostname", "IP Address");
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="timeOut"></param>
         private static void ProcessNode(NetworkNode node, int timeOut)
         {
             var sb = new StringBuilder();

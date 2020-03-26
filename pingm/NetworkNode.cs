@@ -54,7 +54,7 @@ namespace pingm
 
         public override string ToString()
         {
-            return $"Hostname{HostName}, IP: {IP}";
+            return $"Hostname: {HostName}, IP: {IP}";
         }
     }
 }
