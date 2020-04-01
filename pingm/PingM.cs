@@ -28,7 +28,15 @@ namespace pingm
 
             // TODO Add error handling
             bool isRunning = true;
-            int timeOut = int.Parse(args[0]) * 1_000; // Convert from seconds to millis
+            
+            if (!int.TryParse(args[0], out int timeOut))
+            {
+                PrintInvalidTimeout();
+                Environment.Exit(1);
+            }
+
+            timeOut *= 1_000;   // Convert into millis
+
             var nodes = new List<NetworkNode>();
 
             // Event handler for CTRL-C
@@ -121,6 +129,14 @@ namespace pingm
         private static void PrintNoValidNodes()
         {
             Console.WriteLine("No valid hosts supplied.");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private static void PrintInvalidTimeout()
+        {
+            Console.WriteLine("Invalid timeout value supplied.");
         }
 
 
