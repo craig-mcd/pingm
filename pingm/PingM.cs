@@ -22,7 +22,7 @@ namespace pingm
             // Don't run if nothing supplied from user
             if (args.Length < MIN_ARG_SIZE)
             {
-                PrintHelp();
+                DisplayHelp();
                 Environment.Exit(1);
             }
 
@@ -31,7 +31,7 @@ namespace pingm
             
             if (!int.TryParse(args[0], out int timeOut))
             {
-                PrintInvalidTimeout();
+                DisplayInvalidTimeout();
                 Environment.Exit(1);
             }
 
@@ -76,7 +76,7 @@ namespace pingm
                     }
                     catch (SocketException)
                     {
-                        PrintNotValidNode(potentialNode);
+                        DisplayNotValidNode(potentialNode);
                         continue;
                     }
 
@@ -91,7 +91,7 @@ namespace pingm
             // Exit if no valid hosts/nodes
             if (nodes.Count == 0)
             {
-                PrintNoValidNodes();
+                DisplayNoValidNodes();
                 Environment.Exit(1);
             }
 
@@ -104,7 +104,7 @@ namespace pingm
 
                 Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                 Console.ResetColor();
-                PrintHeader();
+                DisplayHeader();
 
                 foreach (var node in nodes)
                 {
@@ -124,52 +124,56 @@ namespace pingm
 
 
         /// <summary>
-        /// 
+        /// Display that no valid nodes have been supplied
         /// </summary>
-        private static void PrintNoValidNodes()
+        private static void DisplayNoValidNodes()
         {
-            Console.WriteLine("No valid hosts supplied.");
+            const string msg = "No valid hosts supplied.";
+            Console.WriteLine(msg);
         }
 
         /// <summary>
-        /// 
+        /// Display that invalid timeout value supplied
         /// </summary>
-        private static void PrintInvalidTimeout()
+        private static void DisplayInvalidTimeout()
         {
-            Console.WriteLine("Invalid timeout value supplied.");
+            const string msg = "Invalid timeout value supplied.";
+            Console.WriteLine(msg);
         }
 
 
         /// <summary>
-        /// 
+        /// Display that node is not valid
         /// </summary>
         /// <param name="potentialNode"></param>
-        private static void PrintNotValidNode(string potentialNode)
+        private static void DisplayNotValidNode(string potentialNode)
         {
-            Console.WriteLine($"Hostname '{potentialNode}' does not resolve to an IP address.");
+            string msg = $"Hostname '{potentialNode}' does not resolve to an IP address.";
+            Console.WriteLine(msg);
         }
 
 
         /// <summary>
-        /// 
+        /// Display help to user
         /// </summary>
-        private static void PrintHelp()
+        private static void DisplayHelp()
         {
-            Console.WriteLine($"{APP_NAME} <timeout in seconds> <host1> <host2> <host..> <host10>");
+            string msg = $"{APP_NAME} <timeout in seconds> <host1> <host2> <host..> <host10>";
+            Console.WriteLine(msg);
         }
 
 
         /// <summary>
-        /// 
+        /// Display basic header for output
         /// </summary>
-        private static void PrintHeader()
+        private static void DisplayHeader()
         {
             Console.WriteLine("{0,-20} {1,-15}", "Hostname", "IP Address");
         }
 
 
         /// <summary>
-        /// 
+        /// Process an individual node
         /// </summary>
         /// <param name="node"></param>
         /// <param name="timeOut"></param>
