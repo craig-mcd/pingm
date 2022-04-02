@@ -7,6 +7,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/fatih/color"
 	"github.com/go-ping/ping"
 )
 
@@ -65,12 +66,12 @@ func main() {
 					stats := pinger.Statistics()
 
 					if stats.PacketsRecv > 0 {
-						fmt.Printf("%-30s %dms\n", node, *&stats.AvgRtt/time.Millisecond)
+						color.Green("%-30s %dms\n", node, *&stats.AvgRtt/time.Millisecond)
 					} else {
-						fmt.Printf("%-30s timed out\n", node)
+						color.Cyan("%-30s timed out\n", node)
 					}
 				} else {
-					fmt.Printf("%-30s %s\n", node, err.Error())
+					color.Red("%-30s %s\n", node, err.Error())
 				}
 
 			}(node)
