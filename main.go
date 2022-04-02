@@ -17,15 +17,15 @@ func main() {
 	flag.Parse()
 
 	dirtyNodes := flag.Args()
-	nodes, invalid := cleanNodes(dirtyNodes)
+	nodes, invalidNodes := cleanNodes(dirtyNodes)
 
 	if len(nodes) == 0 {
 		fmt.Println("No valid nodes supplied.")
 		os.Exit(0)
 	}
 
-	if len(invalid) > 0 {
-		fmt.Println("Invalid nodes:", invalid)
+	if len(invalidNodes) > 0 {
+		printInvalidNodes(invalidNodes)
 	}
 
 	timeoutDuration := time.Duration(*timeout) * time.Millisecond
