@@ -1,4 +1,4 @@
-# PingM
+# pingm
 
-Basic utility to ping multiple hosts in parallel.
+Basic utility to ping multiple hosts concurrently.
 
