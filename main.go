@@ -39,6 +39,8 @@ func main() {
 			wg.Done()
 		}()
 
+		diplayTimestamp()
+
 		for _, node := range nodes {
 
 			wg.Add(1)
