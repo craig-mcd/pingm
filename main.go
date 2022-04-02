@@ -6,9 +6,6 @@ import (
 	"os"
 	"sync"
 	"time"
-
-	"github.com/fatih/color"
-	"github.com/go-ping/ping"
 )
 
 func main() {
@@ -40,41 +37,11 @@ func main() {
 			wg.Done()
 		}()
 
-		diplayTimestamp()
+		printTimestamp()
 
 		for _, node := range nodes {
-
 			wg.Add(1)
-
-			go func(node string) {
-
-				defer wg.Done()
-
-				pinger, err := ping.NewPinger(node)
-
-				if err != nil {
-					panic(err)
-				}
-
-				pinger.Count = 1
-				pinger.SetPrivileged(true)
-				pinger.Timeout = timeoutDuration
-				err = pinger.Run()
-
-				if err == nil {
-
-					stats := pinger.Statistics()
-
-					if stats.PacketsRecv > 0 {
-						color.Green("%-30s %dms\n", node, *&stats.AvgRtt/time.Millisecond)
-					} else {
-						color.Cyan("%-30s timed out\n", node)
-					}
-				} else {
-					color.Red("%-30s %s\n", node, err.Error())
-				}
-
-			}(node)
+			go processNode(node, &wg, timeoutDuration)
 		}
 
 		wg.Wait()

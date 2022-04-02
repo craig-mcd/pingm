@@ -7,7 +7,7 @@ import (
 	"github.com/fatih/color"
 )
 
-func diplayTimestamp() {
+func printTimestamp() {
 
 	color.Set(color.BgHiYellow)
 	color.Set(color.FgBlack)
