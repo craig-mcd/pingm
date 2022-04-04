@@ -35,8 +35,11 @@ func processNode(node string, wg *sync.WaitGroup, timeout time.Duration) {
 
 	pinger, err := ping.NewPinger(node)
 
+	// return early if failed to create Pinger
+	// TODO add optional logging
 	if err != nil {
-		panic(err)
+		color.Red("%-30s %s\n", node, err)
+		return
 	}
 
 	pinger.Count = 1
