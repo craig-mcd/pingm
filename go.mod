@@ -3,8 +3,11 @@ module github.com/craigmcdonaldcodes/pingm
 go 1.18
 
 require (
-	github.com/fatih/color v1.13.0 // indirect
-	github.com/go-ping/ping v0.0.0-20211130115550-779d1e919534 // indirect
+	github.com/fatih/color v1.13.0
+	github.com/go-ping/ping v0.0.0-20211130115550-779d1e919534
+)
+
+require (
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/mattn/go-colorable v0.1.9 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
