@@ -52,7 +52,7 @@ func processNode(node string, wg *sync.WaitGroup, timeout time.Duration) {
 		stats := pinger.Statistics()
 
 		if stats.PacketsRecv > 0 {
-			color.Green("%-30s %dms\n", node, *&stats.AvgRtt/time.Millisecond)
+			color.Green("%-30s %dms\n", node, stats.AvgRtt/time.Millisecond)
 		} else {
 			color.Cyan("%-30s timed out\n", node)
 		}
