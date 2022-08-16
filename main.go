@@ -10,7 +10,9 @@ import (
 
 func main() {
 
-	timeout := flag.Int64("t", 5_000, "timeout value in millis")
+	var timeout int64
+	flag.Int64Var(&timeout, "t", 5_000, "timeout value in millis")
+	flag.Int64Var(&timeout, "timeout", 5_000, "timeout value in millis")
 	flag.Parse()
 
 	dirtyNodes := flag.Args()
@@ -25,7 +27,7 @@ func main() {
 		printInvalidNodes(invalidNodes)
 	}
 
-	timeoutDuration := time.Duration(*timeout) * time.Millisecond
+	timeoutDuration := time.Duration(timeout) * time.Millisecond
 	var wg sync.WaitGroup
 
 	for {
