@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/fatih/color"
@@ -38,11 +39,10 @@ func timestamp() string {
 
 func printInvalidNodes(nodes []string) {
 
-	fmt.Print("Invalid nodes: ")
+	var sb strings.Builder
+	sb.WriteString("Invalid nodes: ")
+	sb.WriteString(strings.Join(nodes, " "))
+	sb.WriteString("\n")
 
-	for _, n := range nodes {
-		fmt.Print(n, " ")
-	}
-
-	fmt.Printf("\n\n")
+	fmt.Println(sb.String())
 }
