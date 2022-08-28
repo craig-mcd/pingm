@@ -36,7 +36,6 @@ func main() {
 
 	for {
 		// used to force each iteration to wait for the timeout
-		// TODO check if this is idiomatic Go
 		wg.Add(1)
 		go func() {
 			time.Sleep(timeoutDuration + 100*time.Millisecond)
