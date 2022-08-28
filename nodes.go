@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net"
 	"sync"
 	"time"
@@ -29,16 +30,23 @@ func cleanNodes(dirtyNodes []string) ([]string, []string) {
 	return nodes, invalidNodes
 }
 
-func processNode(node string, wg *sync.WaitGroup, timeout time.Duration) {
+func processNode(node string, wg *sync.WaitGroup, timeout time.Duration, printChan chan<- printDetails) {
 
 	defer wg.Done()
 
 	pinger, err := ping.NewPinger(node)
+	var message printDetails
 
 	// return early if failed to create Pinger
 	// TODO add optional logging
 	if err != nil {
-		color.Red("%-30s %s\n", node, err)
+
+		message = printDetails{
+			message: fmt.Sprintf("%-30s %s", node, err),
+			fgColor: color.FgRed,
+		}
+
+		printChan <- message
 		return
 	}
 
@@ -52,11 +60,23 @@ func processNode(node string, wg *sync.WaitGroup, timeout time.Duration) {
 		stats := pinger.Statistics()
 
 		if stats.PacketsRecv > 0 {
-			color.Green("%-30s %dms\n", node, stats.AvgRtt/time.Millisecond)
+			message = printDetails{
+				message: fmt.Sprintf("%-30s %dms", node, stats.AvgRtt/time.Millisecond),
+				fgColor: color.FgGreen,
+			}
 		} else {
-			color.Cyan("%-30s timed out\n", node)
+			message = printDetails{
+				message: fmt.Sprintf("%-30s timed out", node),
+				fgColor: color.FgCyan,
+			}
 		}
+
 	} else {
-		color.Red("%-30s %s\n", node, err.Error())
+		message = printDetails{
+			message: fmt.Sprintf("%-30s %s", node, err.Error()),
+			fgColor: color.FgRed,
+		}
 	}
+
+	printChan <- message
 }

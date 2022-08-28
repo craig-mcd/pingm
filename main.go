@@ -6,6 +6,8 @@ import (
 	"os"
 	"sync"
 	"time"
+
+	"github.com/fatih/color"
 )
 
 func main() {
@@ -30,20 +32,28 @@ func main() {
 	timeoutDuration := time.Duration(timeout) * time.Second
 	var wg sync.WaitGroup
 
+	printChan := make(chan printDetails, len(nodes))
+
+	go printManager(printChan)
+
 	for {
 		// used to force each iteration to wait for the timeout
 		// TODO check if this is idiomatic Go
 		wg.Add(1)
 		go func() {
-			time.Sleep(timeoutDuration)
+			time.Sleep(timeoutDuration + 100*time.Millisecond)
 			wg.Done()
 		}()
 
-		printTimestamp()
+		printChan <- printDetails{
+			message: timestamp(),
+			bgColor: color.BgHiYellow,
+			fgColor: color.FgBlack,
+		}
 
 		for _, node := range nodes {
 			wg.Add(1)
-			go processNode(node, &wg, timeoutDuration)
+			go processNode(node, &wg, timeoutDuration, printChan)
 		}
 
 		wg.Wait()
