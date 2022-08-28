@@ -32,9 +32,15 @@ func printManager(printChan <-chan printDetails) {
 	}
 }
 
-func timestamp() string {
-	t := time.Now()
-	return t.Format("2006-01-02 15:04:05")
+func timestamp() printDetails {
+
+	now := time.Now().Format("2006-01-02 15:04:05")
+
+	return printDetails{
+		message: now,
+		bgColor: color.BgHiYellow,
+		fgColor: color.FgBlack,
+	}
 }
 
 func printInvalidNodes(nodes []string) {

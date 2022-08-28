@@ -6,8 +6,6 @@ import (
 	"os"
 	"sync"
 	"time"
-
-	"github.com/fatih/color"
 )
 
 func main() {
@@ -45,11 +43,7 @@ func main() {
 			wg.Done()
 		}()
 
-		printChan <- printDetails{
-			message: timestamp(),
-			bgColor: color.BgHiYellow,
-			fgColor: color.FgBlack,
-		}
+		printChan <- timestamp()
 
 		for _, node := range nodes {
 			wg.Add(1)
