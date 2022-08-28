@@ -38,7 +38,6 @@ func processNode(node string, wg *sync.WaitGroup, timeout time.Duration, printCh
 	var message printDetails
 
 	// return early if failed to create Pinger
-	// TODO add optional logging
 	if err != nil {
 
 		message = printDetails{
