@@ -14,16 +14,19 @@ type printDetails struct {
 	fgColor color.Attribute
 }
 
-func printManager(printChan <-chan printDetails) {
+func printManager(printChan <-chan printDetails, colorOutput bool) {
 
 	for p := range printChan {
 
-		if p.bgColor != 0 {
-			color.Set(p.bgColor)
-		}
+		if colorOutput {
 
-		if p.fgColor != 0 {
-			color.Set(p.fgColor)
+			if p.bgColor != 0 {
+				color.Set(p.bgColor)
+			}
+
+			if p.fgColor != 0 {
+				color.Set(p.fgColor)
+			}
 		}
 
 		fmt.Println(p.message)

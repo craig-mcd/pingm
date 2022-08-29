@@ -11,12 +11,16 @@ import (
 func main() {
 
 	var timeout int64
+	var noColor bool
+
 	flag.Int64Var(&timeout, "t", 5, "timeout value in seconds")
 	flag.Int64Var(&timeout, "timeout", 5, "timeout value in seconds")
+	flag.BoolVar(&noColor, "nc", false, "disable color output")
 	flag.Parse()
 
 	dirtyNodes := flag.Args()
 	nodes, invalidNodes := cleanNodes(dirtyNodes)
+	colorOutput := !noColor // this is required due to how bool flags works
 
 	if len(nodes) == 0 {
 		fmt.Println("No valid nodes supplied.")
@@ -32,7 +36,7 @@ func main() {
 
 	printChan := make(chan printDetails, len(nodes))
 
-	go printManager(printChan)
+	go printManager(printChan, colorOutput)
 
 	for {
 		// used to force each iteration to wait for the timeout
