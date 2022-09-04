@@ -16,6 +16,7 @@ func main() {
 	flag.Int64Var(&timeout, "t", 5, "timeout value in seconds")
 	flag.Int64Var(&timeout, "timeout", 5, "timeout value in seconds")
 	flag.BoolVar(&noColor, "nc", false, "disable color output")
+	flag.BoolVar(&noColor, "nocolor", false, "disable color output")
 	flag.Parse()
 
 	dirtyNodes := flag.Args()
