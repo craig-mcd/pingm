@@ -55,6 +55,6 @@ func main() {
 		}
 
 		wg.Wait()
-		fmt.Println()
+		printChan <- printDetails{message: "\n"}
 	}
 }
