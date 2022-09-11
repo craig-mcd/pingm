@@ -10,38 +10,38 @@ import (
 	"github.com/go-ping/ping"
 )
 
-func cleanNodes(dirtyNodes []string) ([]string, []string) {
+func cleanHosts(dirtyHosts []string) ([]string, []string) {
 
-	nodes := []string{}
-	invalidNodes := []string{}
+	hosts := []string{}
+	invalidHosts := []string{}
 
-	for _, node := range dirtyNodes {
+	for _, host := range dirtyHosts {
 
-		_, err := net.LookupIP(node)
+		_, err := net.LookupIP(host)
 
 		if err == nil {
-			nodes = append(nodes, node)
+			hosts = append(hosts, host)
 		} else {
-			invalidNodes = append(invalidNodes, node)
+			invalidHosts = append(invalidHosts, host)
 		}
 
 	}
 
-	return nodes, invalidNodes
+	return hosts, invalidHosts
 }
 
-func processNode(node string, wg *sync.WaitGroup, timeout time.Duration, printChan chan<- printDetails) {
+func processHost(host string, wg *sync.WaitGroup, timeout time.Duration, printChan chan<- printDetails) {
 
 	defer wg.Done()
 
-	pinger, err := ping.NewPinger(node)
+	pinger, err := ping.NewPinger(host)
 	var message printDetails
 
 	// return early if failed to create Pinger
 	if err != nil {
 
 		message = printDetails{
-			message: fmt.Sprintf("%-30s %s", node, err),
+			message: fmt.Sprintf("%-30s %s", host, err),
 			fgColor: color.FgRed,
 		}
 
@@ -60,19 +60,19 @@ func processNode(node string, wg *sync.WaitGroup, timeout time.Duration, printCh
 
 		if stats.PacketsRecv > 0 {
 			message = printDetails{
-				message: fmt.Sprintf("%-30s %dms", node, stats.AvgRtt/time.Millisecond),
+				message: fmt.Sprintf("%-30s %dms", host, stats.AvgRtt/time.Millisecond),
 				fgColor: color.FgGreen,
 			}
 		} else {
 			message = printDetails{
-				message: fmt.Sprintf("%-30s timed out", node),
+				message: fmt.Sprintf("%-30s timed out", host),
 				fgColor: color.FgCyan,
 			}
 		}
 
 	} else {
 		message = printDetails{
-			message: fmt.Sprintf("%-30s %s", node, err.Error()),
+			message: fmt.Sprintf("%-30s %s", host, err.Error()),
 			fgColor: color.FgRed,
 		}
 	}

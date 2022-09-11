@@ -46,11 +46,11 @@ func timestamp() printDetails {
 	}
 }
 
-func printInvalidNodes(nodes []string) {
+func printInvalidHosts(hosts []string) {
 
 	var sb strings.Builder
-	sb.WriteString("Invalid nodes: ")
-	sb.WriteString(strings.Join(nodes, " "))
+	sb.WriteString("Invalid hosts: ")
+	sb.WriteString(strings.Join(hosts, " "))
 	sb.WriteString("\n")
 
 	fmt.Println(sb.String())

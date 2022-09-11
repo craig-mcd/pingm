@@ -19,23 +19,23 @@ func main() {
 	flag.BoolVar(&noColor, "nocolor", false, "disable color output")
 	flag.Parse()
 
-	dirtyNodes := flag.Args()
-	nodes, invalidNodes := cleanNodes(dirtyNodes)
+	dirtyHosts := flag.Args()
+	hosts, invalidHosts := cleanHosts(dirtyHosts)
 	colorOutput := !noColor // this is required due to how bool flags works
 
-	if len(nodes) == 0 {
-		fmt.Println("No valid nodes supplied.")
+	if len(hosts) == 0 {
+		fmt.Println("No valid hosts supplied.")
 		os.Exit(0)
 	}
 
-	if len(invalidNodes) > 0 {
-		printInvalidNodes(invalidNodes)
+	if len(invalidHosts) > 0 {
+		printInvalidHosts(invalidHosts)
 	}
 
 	timeoutDuration := time.Duration(timeout) * time.Second
 	var wg sync.WaitGroup
 
-	printChan := make(chan printDetails, len(nodes))
+	printChan := make(chan printDetails, len(hosts))
 
 	go printManager(printChan, colorOutput)
 
@@ -49,9 +49,9 @@ func main() {
 
 		printChan <- timestamp()
 
-		for _, node := range nodes {
+		for _, host := range hosts {
 			wg.Add(1)
-			go processNode(node, &wg, timeoutDuration, printChan)
+			go processHost(host, &wg, timeoutDuration, printChan)
 		}
 
 		wg.Wait()
