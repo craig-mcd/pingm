@@ -10,6 +10,7 @@ import (
 
 func main() {
 
+	// Flag parsing
 	var timeout int64
 	var noColor bool
 
@@ -23,11 +24,13 @@ func main() {
 	hosts, invalidHosts := cleanHosts(dirtyHosts)
 	colorOutput := !noColor // this is required due to how bool flags works
 
+	// No valid hosts supplied, exit
 	if len(hosts) == 0 {
 		fmt.Println("No valid hosts supplied.")
 		os.Exit(0)
 	}
 
+	// Display invalid suppled hosts
 	if len(invalidHosts) > 0 {
 		printInvalidHosts(invalidHosts)
 	}
@@ -35,8 +38,8 @@ func main() {
 	timeoutDuration := time.Duration(timeout) * time.Second
 	var wg sync.WaitGroup
 
+	// This channel is this single place to print output
 	printChan := make(chan printDetails, len(hosts))
-
 	go printManager(printChan, colorOutput)
 
 	for {

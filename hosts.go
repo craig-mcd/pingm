@@ -10,6 +10,7 @@ import (
 	"github.com/go-ping/ping"
 )
 
+// cleanHosts filter out valid and invalid hosts returning both
 func cleanHosts(dirtyHosts []string) ([]string, []string) {
 
 	hosts := []string{}
@@ -30,6 +31,7 @@ func cleanHosts(dirtyHosts []string) ([]string, []string) {
 	return hosts, invalidHosts
 }
 
+// processHost check if a host is reachable and send results to the print channel
 func processHost(host string, wg *sync.WaitGroup, timeout time.Duration, printChan chan<- printDetails) {
 
 	defer wg.Done()
@@ -49,8 +51,8 @@ func processHost(host string, wg *sync.WaitGroup, timeout time.Duration, printCh
 		return
 	}
 
-	pinger.Count = 1
-	pinger.SetPrivileged(true)
+	pinger.Count = 1           // we only want a single response
+	pinger.SetPrivileged(true) // send ICMP and not UDP
 	pinger.Timeout = timeout
 	err = pinger.Run()
 
