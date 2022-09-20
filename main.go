@@ -4,8 +4,12 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"os/signal"
 	"sync"
+	"syscall"
 	"time"
+
+	"github.com/fatih/color"
 )
 
 func main() {
@@ -42,7 +46,22 @@ func main() {
 	printChan := make(chan printDetails, len(hosts))
 	go printManager(printChan, colorOutput)
 
-	for {
+	// Handle SIGINT, SIGTERM
+	keepRunning := true
+	signals := make(chan os.Signal, 1)
+	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
+
+	// used to catch the signal, mark the sentinal value as done for the main loop
+	go func() {
+		<-signals
+		printChan <- printDetails{message: "\rFinishing batch (ctrl-c to kill)", fgColor: color.FgRed}
+		keepRunning = false
+		<-signals
+		os.Exit(1)
+	}()
+
+	for keepRunning {
+
 		// used to force each iteration to wait for the timeout
 		wg.Add(1)
 		go func() {
