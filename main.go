@@ -51,7 +51,7 @@ func main() {
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
 
-	// used to catch the signal, mark the sentinal value as done for the main loop
+	// used to catch the signal, mark the sentinel value as done for the main loop
 	go func() {
 		<-signals
 		printChan <- printDetails{message: "\rFinishing batch (ctrl-c to kill)", fgColor: color.FgRed}
