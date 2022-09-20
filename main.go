@@ -65,6 +65,7 @@ func main() {
 		// used to force each iteration to wait for the timeout
 		wg.Add(1)
 		go func() {
+			// 100ms added to the batch timeout so not the exact value of the ping timeout
 			time.Sleep(timeoutDuration + 100*time.Millisecond)
 			wg.Done()
 		}()
