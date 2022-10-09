@@ -28,6 +28,10 @@ func main() {
 	hosts, invalidHosts := cleanHosts(dirtyHosts)
 	colorOutput := !noColor // this is required due to how bool flags works
 
+	// This channel is this single place to print output
+	printChan := make(chan printDetails, len(hosts))
+	go printManager(printChan, colorOutput)
+
 	// No valid hosts supplied, exit
 	if len(hosts) == 0 {
 		fmt.Println("No valid hosts supplied.")
@@ -36,15 +40,11 @@ func main() {
 
 	// Display invalid suppled hosts
 	if len(invalidHosts) > 0 {
-		printInvalidHosts(invalidHosts)
+		printChan <- printDetails{message: fmtInvalidHosts(invalidHosts), fgColor: color.FgBlue}
 	}
 
 	timeoutDuration := time.Duration(timeout) * time.Second
 	var wg sync.WaitGroup
-
-	// This channel is this single place to print output
-	printChan := make(chan printDetails, len(hosts))
-	go printManager(printChan, colorOutput)
 
 	// Handle SIGINT, SIGTERM
 	keepRunning := true

@@ -50,12 +50,12 @@ func timestamp() printDetails {
 }
 
 // printInvalidHosts helper function to display invalid supplied hosts
-func printInvalidHosts(hosts []string) {
+func fmtInvalidHosts(hosts []string) string {
 
 	var sb strings.Builder
 	sb.WriteString("Invalid hosts: ")
 	sb.WriteString(strings.Join(hosts, " "))
 	sb.WriteString("\n")
 
-	fmt.Println(sb.String())
+	return sb.String()
 }
