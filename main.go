@@ -23,20 +23,36 @@ func main() {
 	flag.BoolVar(&noColor, "nc", false, "disable color output")
 	flag.BoolVar(&noColor, "nocolor", false, "disable color output")
 	flag.Parse()
+	colorOutput := !noColor // this is required due to how bool flags works
 
 	dirtyHosts := flag.Args()
+
+	if len(dirtyHosts) == 0 {
+
+		if colorOutput {
+			color.Set(color.FgRed)
+		}
+
+		fmt.Println("No hosts supplied.")
+		os.Exit(0)
+	}
+
 	hosts, invalidHosts := cleanHosts(dirtyHosts)
-	colorOutput := !noColor // this is required due to how bool flags works
+
+	// No valid hosts supplied, exit
+	if len(hosts) == 0 {
+
+		if colorOutput {
+			color.Set(color.FgRed)
+		}
+
+		fmt.Println("No valid hosts supplied.")
+		os.Exit(0)
+	}
 
 	// This channel is this single place to print output
 	printChan := make(chan printDetails, len(hosts))
 	go printManager(printChan, colorOutput)
-
-	// No valid hosts supplied, exit
-	if len(hosts) == 0 {
-		fmt.Println("No valid hosts supplied.")
-		os.Exit(0)
-	}
 
 	// Display invalid suppled hosts
 	if len(invalidHosts) > 0 {
