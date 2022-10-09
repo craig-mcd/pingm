@@ -27,8 +27,10 @@ func main() {
 
 	dirtyHosts := flag.Args()
 
+	// no hosts provided, exit
 	if len(dirtyHosts) == 0 {
 
+		// print channel is not setup yet
 		if colorOutput {
 			color.Set(color.FgRed)
 		}
@@ -37,11 +39,13 @@ func main() {
 		os.Exit(0)
 	}
 
+	// split valid and invalid hosts
 	hosts, invalidHosts := cleanHosts(dirtyHosts)
 
 	// No valid hosts supplied, exit
 	if len(hosts) == 0 {
 
+		// print channel is not setup yet
 		if colorOutput {
 			color.Set(color.FgRed)
 		}
