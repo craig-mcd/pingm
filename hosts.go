@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/fatih/color"
-	"github.com/go-ping/ping"
+	probing "github.com/prometheus-community/pro-bing"
 )
 
 // cleanHosts filter out valid and invalid hosts returning both
@@ -36,7 +36,7 @@ func processHost(host string, wg *sync.WaitGroup, timeout time.Duration, printCh
 
 	defer wg.Done()
 
-	pinger, err := ping.NewPinger(host)
+	pinger, err := probing.NewPinger(host)
 	var message printDetails
 
 	// return early if failed to create Pinger
