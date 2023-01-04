@@ -73,9 +73,11 @@ func main() {
 
 	// used to catch the signal, mark the sentinel value as done for the main loop
 	go func() {
+		// catch once, finish batch then quit
 		<-signals
 		printChan <- printDetails{message: "\rFinishing batch (ctrl-c to kill)", fgColor: color.FgBlue}
 		keepRunning = false
+		// catch again, immediate quit
 		<-signals
 		os.Exit(1)
 	}()
