@@ -34,7 +34,19 @@ func cleanHosts(dirtyHosts []string) ([]string, []string) {
 // processHost check if a host is reachable and send results to the print channel
 func processHost(host string, wg *sync.WaitGroup, timeout time.Duration, printChan chan<- printDetails) {
 
-	defer wg.Done()
+	// update wait group, handle any panic
+	defer func() {
+
+		wg.Done()
+
+		if r := recover(); r != nil {
+
+			printChan <- printDetails{
+				message: fmt.Sprintf("panic on %s goroutine: %s", host, r),
+				fgColor: color.FgRed,
+			}
+		}
+	}()
 
 	pinger, err := probing.NewPinger(host)
 	var message printDetails
