@@ -8,3 +8,6 @@ pingm
 
 # Test binary, built with `go test -c`
 *.test
+
+# VS Code
+.vscode/
