@@ -92,4 +92,6 @@ func processHost(host string, wg *sync.WaitGroup, timeout time.Duration, printCh
 			fgColor: color.FgRed,
 		}
 	}
+
+	// no explicit return, defer sends contents of 'message' to the printChannel
 }
