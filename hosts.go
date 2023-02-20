@@ -47,6 +47,7 @@ func processHost(host string, wg *sync.WaitGroup, timeout time.Duration, printCh
 			}
 		}
 
+                // there should always be content in the message sent to the printChannel
 		printChan <- message
 
 		wg.Done()
