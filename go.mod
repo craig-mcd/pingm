@@ -1,4 +1,4 @@
-module github.com/craigmcdonaldcodes/pingm
+module github.com/craigamcdonald/pingm
 
 go 1.20
 
