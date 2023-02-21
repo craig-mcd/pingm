@@ -5,9 +5,13 @@ pingm
 *.dll
 *.so
 *.dylib
+*.out
 
 # Test binary, built with `go test -c`
 *.test
 
 # VS Code
 .vscode/
+
+vendor/
+go.work
