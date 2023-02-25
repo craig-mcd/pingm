@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strings"
 	"time"
 
@@ -58,4 +59,16 @@ func fmtInvalidHosts(hosts []string) string {
 	sb.WriteString("\n")
 
 	return sb.String()
+}
+
+// signalHandler catch the signal, mark the sentinel value as done for the main loop
+func signalHandler(printChan chan<- printDetails, signals <-chan os.Signal, keepRunning *bool) {
+
+	// catch once, finish batch then quit
+	<-signals
+	printChan <- printDetails{message: "\rFinishing batch (ctrl-c to kill)", fgColor: color.FgBlue}
+	*keepRunning = false
+	// catch again, immediate quit
+	<-signals
+	os.Exit(1)
 }

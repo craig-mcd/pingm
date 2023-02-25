@@ -71,16 +71,8 @@ func main() {
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
 
-	// used to catch the signal, mark the sentinel value as done for the main loop
-	go func() {
-		// catch once, finish batch then quit
-		<-signals
-		printChan <- printDetails{message: "\rFinishing batch (ctrl-c to kill)", fgColor: color.FgBlue}
-		keepRunning = false
-		// catch again, immediate quit
-		<-signals
-		os.Exit(1)
-	}()
+	// register cleanup
+	go signalHandler(printChan, signals, &keepRunning)
 
 	for keepRunning {
 
