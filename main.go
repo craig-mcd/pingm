@@ -92,6 +92,8 @@ func main() {
 		}
 
 		wg.Wait()
-		printChan <- printDetails{message: "\n"}
+
+		// blank line between batches
+		printChan <- printDetails{message: ""}
 	}
 }
