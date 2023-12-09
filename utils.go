@@ -23,18 +23,17 @@ func printManager(printChan <-chan printDetails, colorOutput bool) {
 
 		if colorOutput {
 
-			if p.bgColor != 0 {
-				color.Set(p.bgColor)
-			}
+			color.Set(p.bgColor)
+			color.Set(p.fgColor)
 
-			if p.fgColor != 0 {
-				color.Set(p.fgColor)
-			}
+			// Don't print newline due to how colour output works
+			fmt.Print(p.message)
+			color.Unset()
+			fmt.Println()
+
+		} else {
+			fmt.Println(p.message)
 		}
-
-		fmt.Println(p.message)
-
-		color.Unset()
 	}
 }
 
