@@ -27,15 +27,22 @@ func main() {
 
 	dirtyHosts := flag.Args()
 
+	// the print channel is not setup yet as the size of the channel
+	// is not known until all valid hosts are determined
+	// color output is a bit messy at the start, not sure of a cleaner way yet
+
 	// no hosts provided, exit
 	if len(dirtyHosts) == 0 {
 
+		msg := "No hosts supplied."
+
 		// print channel is not setup yet
 		if colorOutput {
-			color.Set(color.FgRed)
+			color.Red(msg)
+		} else {
+			fmt.Println(msg)
 		}
 
-		fmt.Println("No hosts supplied.")
 		os.Exit(0)
 	}
 
@@ -45,12 +52,15 @@ func main() {
 	// no valid hosts supplied, exit
 	if len(hosts) == 0 {
 
+		msg := "No valid hosts supplied."
+
 		// print channel is not setup yet
 		if colorOutput {
-			color.Set(color.FgRed)
+			color.Red(msg)
+		} else {
+			fmt.Println(msg)
 		}
 
-		fmt.Println("No valid hosts supplied.")
 		os.Exit(0)
 	}
 
