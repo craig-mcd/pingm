@@ -4,7 +4,7 @@ go 1.22
 
 require (
 	github.com/fatih/color v1.17.0
-	github.com/prometheus-community/pro-bing v0.4.0
+	github.com/prometheus-community/pro-bing v0.4.1
 )
 
 require (
