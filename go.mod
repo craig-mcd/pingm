@@ -1,4 +1,4 @@
-module github.com/craigamcdonald/pingm
+module github.com/craig-mcd/pingm
 
 go 1.22
 
