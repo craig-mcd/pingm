@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"os"
 	"os/signal"
 	"sync"
@@ -25,48 +24,30 @@ func main() {
 	flag.Parse()
 	colorOutput := !noColor // required due to how bool flags works
 
-	dirtyHosts := flag.Args()
+	suppliedHosts := flag.Args()
 
-	// the print channel is not setup yet as the size of the channel
-	// is not known until all valid hosts are determined
-	// color output is a bit messy at the start, not sure of a cleaner way yet
+	// this channel is this single place to display to screen
+	// just assume all hosts supplied are valid and use for
+	// size of the channel buffer
+	printChan := make(chan printDetails, len(suppliedHosts))
+	go printManager(printChan, colorOutput)
 
 	// no hosts provided, exit
-	if len(dirtyHosts) == 0 {
-
-		msg := "No hosts supplied."
-
-		// print channel is not setup yet
-		if colorOutput {
-			color.Red(msg)
-		} else {
-			fmt.Println(msg)
-		}
-
+	if len(suppliedHosts) == 0 {
+		printChan <- printDetails{message: "No hosts supplied.", fgColor: color.FgRed}
+		time.Sleep(50 * time.Millisecond) // gross hack
 		os.Exit(0)
 	}
 
 	// split valid and invalid hosts
-	hosts, invalidHosts := cleanHosts(dirtyHosts)
+	hosts, invalidHosts := cleanHosts(suppliedHosts)
 
 	// no valid hosts supplied, exit
 	if len(hosts) == 0 {
-
-		msg := "No valid hosts supplied."
-
-		// print channel is not setup yet
-		if colorOutput {
-			color.Red(msg)
-		} else {
-			fmt.Println(msg)
-		}
-
+		printChan <- printDetails{message: "No valid hosts supplied.", fgColor: color.FgRed}
+		time.Sleep(50 * time.Millisecond) // gross hack
 		os.Exit(0)
 	}
-
-	// this channel is this single place to display to screen
-	printChan := make(chan printDetails, len(hosts))
-	go printManager(printChan, colorOutput)
 
 	// display invalid supplied hosts
 	if len(invalidHosts) > 0 {
