@@ -3,7 +3,7 @@ module github.com/craig-mcd/pingm
 go 1.23
 
 require (
-	github.com/fatih/color v1.17.0
+	github.com/fatih/color v1.18.0
 	github.com/prometheus-community/pro-bing v0.4.1
 )
 
